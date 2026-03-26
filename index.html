@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>When Things Go to Seat</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="topbar">
+    <span id="topbar-title">When Things Go to Seat</span>
+    <button id="btn-start-tour" title="Start guided tour">Tour</button>
+
+    <div id="sim-controls">
+      <button id="btn-toggle-simulation" class="control-btn" title="Pause simulation">Pause</button>
+      <button id="btn-reset-view" class="control-btn control-btn--ghost" title="Reset map view">View</button>
+      <button id="btn-reset-demo" class="control-btn control-btn--ghost" title="Reset demo">Reset</button>
+      <div id="speed-controls">
+        <button class="speed-btn speed-btn--active" data-speed="1">1×</button>
+        <button class="speed-btn" data-speed="2">2×</button>
+        <button class="speed-btn" data-speed="4">4×</button>
+      </div>
+      <span id="clock">00:00</span>
+    </div>
+  </div>
+
+  <!-- Floating walk-in button -->
+  <button id="btn-walkin" title="Seat a walk-in guest">+ Walk-in</button>
+
+  <div id="layout">
+
+    <aside id="col-left">
+
+      <!-- Sidebar icon strip -->
+      <div id="sidebar-icons">
+        <!-- Bookings (active) -->
+        <button class="sidebar-icon sidebar-icon--active" title="Bookings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path>
+          </svg>
+          <span class="sidebar-icon-label">Bookings</span>
+        </button>
+
+        <!-- Floor Plan -->
+        <button class="sidebar-icon" title="Floor Plan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <line x1="9.5" y1="3.5" x2="14.5" y2="3.5"></line>
+            <line x1="9.5" y1="20.5" x2="14.5" y2="20.5"></line>
+            <line x1="3.5" y1="9.5" x2="3.5" y2="14.5"></line>
+            <line x1="20.5" y1="9.5" x2="20.5" y2="14.5"></line>
+          </svg>
+          <span class="sidebar-icon-label">Floor Plan</span>
+        </button>
+
+        <!-- Reservation -->
+        <button class="sidebar-icon" title="Reservation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+          <span class="sidebar-icon-label">Reservation</span>
+        </button>
+
+        <!-- Private Line -->
+        <button class="sidebar-icon" title="Private Line">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            <circle cx="12" cy="16" r="1.5"></circle>
+          </svg>
+          <span class="sidebar-icon-label">Private</span>
+        </button>
+
+        <!-- Waitlist -->
+        <button class="sidebar-icon" title="Waitlist">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M17 4.5L19 7l-2 2.5"></path>
+            <path d="M7 4.5L5 7l2 2.5"></path>
+          </svg>
+          <span class="sidebar-icon-label">Waitlist</span>
+        </button>
+
+        <!-- Request -->
+        <button class="sidebar-icon" title="Request">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M16 10h.01"></path>
+          </svg>
+          <span class="sidebar-icon-label">Request</span>
+        </button>
+
+        <!-- Flows -->
+        <button class="sidebar-icon" title="Flows">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <path d="M2 12h4l3-3 3 3 3-3 3 3h4"></path>
+            <path d="M2 18h4l3-3 3 3 3-3 3 3h4"></path>
+            <path d="M2 6h4l3 3 3-3 3 3 3-3h4"></path>
+          </svg>
+          <span class="sidebar-icon-label">Flows</span>
+        </button>
+
+        <!-- Guest List -->
+        <button class="sidebar-icon" title="Guest List">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            <line x1="21" y1="11" x2="21" y2="15"></line>
+            <line x1="23" y1="13" x2="19" y2="13"></line>
+          </svg>
+          <span class="sidebar-icon-label">Guests</span>
+        </button>
+
+        <!-- Settings -->
+        <button class="sidebar-icon" title="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span class="sidebar-icon-label">Settings</span>
+        </button>
+
+        <!-- Grid -->
+        <button class="sidebar-icon" title="Grid">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+          <span class="sidebar-icon-label">Grid</span>
+        </button>
+
+        <!-- Servers -->
+        <button class="sidebar-icon" title="Servers">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            <line x1="10" y1="6" x2="18" y2="6"></line>
+            <line x1="10" y1="18" x2="18" y2="18"></line>
+          </svg>
+          <span class="sidebar-icon-label">Servers</span>
+        </button>
+
+        <div class="sidebar-spacer"></div>
+
+        <!-- Help -->
+        <button class="sidebar-icon" title="Help">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span class="sidebar-icon-label">Help</span>
+        </button>
+      </div>
+
+      <!-- Booking panel -->
+      <div id="booking-panel">
+        <div id="booking-panel-header">
+          <div id="bp-search">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Guest or table" autocomplete="off" />
+          </div>
+        </div>
+        <div id="booking-sections">
+          <div class="booking-section" id="section-arrived">
+            <div class="booking-section-header" data-section="arrived">
+              <div class="booking-section-header-left">
+                <span class="booking-section-title">ARRIVED</span>
+              </div>
+              <div class="booking-section-header-right">
+                <span class="booking-section-count" id="count-arrived-badge"></span>
+                <span class="booking-section-chevron">▾</span>
+              </div>
+            </div>
+            <div class="booking-section-body" id="list-arrived"></div>
+          </div>
+          <div class="booking-section" id="section-upcoming">
+            <div class="booking-section-header" data-section="upcoming">
+              <div class="booking-section-header-left">
+                <span class="booking-section-title">UPCOMING</span>
+              </div>
+              <div class="booking-section-header-right">
+                <span class="booking-section-count" id="count-upcoming-badge"></span>
+                <span class="booking-section-chevron">▾</span>
+              </div>
+            </div>
+            <div class="booking-section-body" id="list-upcoming"></div>
+          </div>
+          <div class="booking-section booking-section--inactive">
+            <div class="booking-section-header">
+              <div class="booking-section-header-left">
+                <span class="booking-section-title">SERVERS</span>
+              </div>
+              <span class="booking-section-chevron">▸</span>
+            </div>
+          </div>
+          <div class="booking-section booking-section--inactive">
+            <div class="booking-section-header">
+              <div class="booking-section-header-left">
+                <span class="booking-section-title">REQUESTS</span>
+              </div>
+              <span class="booking-section-chevron">▸</span>
+            </div>
+          </div>
+          <div class="booking-section booking-section--inactive">
+            <div class="booking-section-header">
+              <div class="booking-section-header-left">
+                <span class="booking-section-title">WAITING</span>
+              </div>
+              <span class="booking-section-chevron">▸</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <main id="col-centre">
+
+      <div id="collapse-left" class="collapse-handle" title="Toggle booking panel">
+        <span class="collapse-dots">⋮</span>
+      </div>
+
+      <svg id="floorplan" xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 2620 2600" width="100%" height="100%" style="display:block;" font-family="Montserrat,Arial,sans-serif">
+
+        <defs>
+          <filter id="ambient-glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="22" result="blurred"/>
+            <feMergeNode in="blurred"/>
+          </filter>
+        </defs>
+
+        <!-- floor base -->
+        <rect x="-.63" y="5.59" width="2558.51" height="2549.44" fill="#181818" stroke="#2a2a2a" stroke-miterlimit="10"/>
+
+        <g id="Red_glow_Section_A" filter="url(#ambient-glow)">
+          <rect x="751.96" y="389.44" width="593.81" height="7.89" fill="#181818"/>
+          <rect x="124.24" y="119.86" width="1227.72" height="11.29" fill="#181818"/>
+          <rect x="-167.88" y="411.83" width="589.51" height="9.17" transform="translate(543.3 289.54) rotate(90)" fill="#181818"/>
+          <rect x="303.19" y="872.98" width="861.73" height="9.17" transform="translate(1611.62 143.51) rotate(90)" fill="#181818"/>
+          <rect x="-36.25" y="1225.85" width="333.07" height="12.57" transform="translate(1362.41 1101.85) rotate(90)" fill="#181818"/>
+        </g>
+
+        <g id="Red_glow_Section_B" filter="url(#ambient-glow)">
+          <rect x="1427.04" y="810.38" width="223.88" height="7.89" fill="#181818"/>
+          <rect x="996.73" y="1144.87" width="438.38" height="7.89" fill="#181818"/>
+          <rect x="787.21" y="412.4" width="9.98" height="734.93" fill="#181818"/>
+          <rect x="787.55" y="412.4" width="487.69" height="7.89" fill="#181818"/>
+        </g>
+
+        <g id="Red_glow_Section_C" filter="url(#ambient-glow)">
+          <rect x="1527.17" y="726.74" width="841.46" height="12.57" transform="translate(2680.92 -1214.88) rotate(90)" fill="#181818"/>
+          <rect x="1947.24" y="1325.41" width="552.92" height="12.57" fill="#181818"/>
+          <rect x="2105.32" y="87.24" width="291.4" height="12.57" fill="#181818"/>
+          <rect x="1883.08" y="53.23" width="192.38" height="12.57" fill="#181818"/>
+          <rect x="1853.2" y="686.01" width="1286.36" height="16.49" transform="translate(3190.64 -1802.12) rotate(90)" fill="#181818"/>
+        </g>
+
+        <g id="Red_glow_Section_D" filter="url(#ambient-glow)">
+          <rect x="454.73" y="1636.14" width="289.84" height="12.57" transform="translate(2242.07 1042.77) rotate(90)" fill="#181818"/>
+          <rect x="604.4" y="1774.75" width="588.92" height="12.57" fill="#181818"/>
+          <rect x="993.88" y="1169.27" width="465.33" height="12.57" fill="#181818"/>
+          <rect x="1459.33" y="841.02" width="193.96" height="12.57" fill="#181818"/>
+          <rect x="712.83" y="1221.25" width="159.34" height="12.57" transform="translate(2020.03 435.03) rotate(90)" fill="#181818"/>
+          <rect x="1301.68" y="1011.14" width="327.84" height="12.57" transform="translate(2483.02 -448.17) rotate(90)" fill="#181818"/>
+        </g>
+
+        <g id="Red_glow_Section_E" filter="url(#ambient-glow)">
+          <rect x="-91.84" y="1648.52" width="404.74" height="12.57" transform="translate(1765.33 1544.27) rotate(90)" fill="#181818"/>
+          <rect x="15.76" y="1967.25" width="234.9" height="12.57" transform="translate(2106.74 1840.33) rotate(90)" fill="#181818"/>
+          <rect x="82.09" y="2254.68" width="234.9" height="12.57" transform="translate(2460.51 2061.43) rotate(90)" fill="#181818"/>
+          <rect x="1047.62" y="2174.42" width="626.27" height="16.82" transform="translate(3543.58 822.07) rotate(90)" fill="#181818"/>
+          <rect x="406.68" y="1645.49" width="307.98" height="12.57" transform="translate(2212.45 1091.11) rotate(90)" fill="#181818"/>
+          <rect x="116.7" y="1450.75" width="447.94" height="12.57" fill="#181818"/>
+          <rect x="125.77" y="2495.39" width="1249.16" height="13.35" fill="#181818"/>
+          <rect x="554.37" y="1804.52" width="638.57" height="12.57" fill="#181818"/>
+        </g>
+
+        <!-- ========= SECTION A ========= -->
+        <g id="A" data-name="A" style="isolation:isolate">
+          <!-- table 26 -->
+          <g id="_26" data-name="26">
+            <path d="M242.95,1154.02h9.93v42.91h-9.93c-3.6,0-6.52-2.92-6.52-6.52v-29.87c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1420.13 930.82) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M331.39,1154.02h9.93v42.91h-9.93c-3.6,0-6.52-2.92-6.52-6.52v-29.87c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1508.57 842.38) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M330.6,1259.75h9.93v42.91h-9.93c-3.6,0-6.52-2.92-6.52-6.52v-29.87c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-948.91 1613.52) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M242.16,1259.75h9.93v42.91h-9.93c-3.6,0-6.52-2.92-6.52-6.52v-29.87c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1037.35 1525.08) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="239.04" y="1121.49" width="98.09" height="215.07" rx="13.61" ry="13.61" transform="translate(1517.11 940.94) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 16 -->
+          <g id="_16" data-name="16">
+            <path d="M1218.04,164.94h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1401.95 -1035.22) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1146.61,164.94h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1330.52 -963.79) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1075.18,164.94h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1259.08 -892.36) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1003.74,164.94h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1187.65 -820.92) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1003.74,307.05h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(678.81 1329.76) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1075.18,307.05h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(750.25 1401.19) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1146.61,307.05h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(821.68 1472.63) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1218.04,307.05h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(893.11 1544.06) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="1036.41" y="104.25" width="136.91" height="300.19" rx="13.61" ry="13.61" transform="translate(1359.22 -850.52) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 161 -->
+          <g id="_161" data-name="161">
+            <path d="M808.39,163.24h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(990.59 -627.27) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M736.95,163.24h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(919.16 -555.84) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M665.52,163.24h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(847.73 -484.4) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M594.09,163.24h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(776.29 -412.97) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M594.09,305.35h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(270.86 918.4) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M665.52,305.35h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(342.29 989.84) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M736.95,305.35h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(413.73 1061.27) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M808.39,305.35h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(485.16 1132.7) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="626.76" y="102.55" width="136.91" height="300.19" rx="13.61" ry="13.61" transform="translate(947.86 -442.57) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 24 -->
+          <g id="_24" data-name="24">
+            <path d="M311.45,362.73h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-69.16 693.15) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M253.03,329.81h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-147.22 190.35) rotate(-32.44)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M269.89,237.68h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(314.43 -113.74) rotate(53.34)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M358.01,241.17h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(786.86 147.79) rotate(129.46)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M369.64,329.97h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(477.52 845.28) rotate(-145.45)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="311.99" cy="311.99" r="66.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 25 -->
+          <g id="_25" data-name="25">
+            <path d="M290.23,591.77h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-319.42 900.97) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M290.23,470.15h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(779.35 197.8) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="288.91" cy="549.44" r="57.93" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 23 -->
+          <g id="_23" data-name="23">
+            <path d="M637.31,547.95h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(72.66 1201.58) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M637.31,438.99h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1092.62 -181.63) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="635.45" cy="510.02" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 22 -->
+          <g id="_22" data-name="22">
+            <path d="M637.98,832.76h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-211.48 1487.05) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M637.98,723.79h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1378.09 102.51) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="636.12" cy="794.83" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 21 -->
+          <g id="_21" data-name="21">
+            <path d="M633.73,1053.01h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-435.98 1703.05) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M633.73,944.04h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1594.09 327.02) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="631.86" cy="1015.08" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 20 -->
+          <g id="_20" data-name="20">
+            <path d="M633.73,1241.89h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-624.86 1891.93) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M633.73,1132.92h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1782.97 515.9) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="631.86" cy="1203.96" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+        </g>
+
+        <!-- ========= SECTION B ========= -->
+        <g id="B" data-name="B">
+          <!-- table 15 -->
+          <g id="_15" data-name="15">
+            <path d="M1201.15,534.18h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1201.15,605.61h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1201.15,677.05h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1201.15,748.48h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1343.26,748.48h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2687.6 1533.81) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1343.26,677.05h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2687.6 1390.94) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1343.26,605.61h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2687.6 1248.08) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1343.26,534.18h7.61v36.85h-7.61c-3.6,0-6.52-2.92-6.52-6.52v-23.81c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2687.6 1105.21) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="1204.22" y="516.23" width="136.91" height="300.19" rx="13.61" ry="13.61" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 14 -->
+          <g id="_14" data-name="14">
+            <path d="M1190.25,1068.77h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(98.82 2288.71) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1107.29,1022.02h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-388.92 759.36) rotate(-32.44)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1131.23,891.18h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1193.18 -540.65) rotate(53.34)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1256.37,896.15h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2772.71 535.89) rotate(129.46)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1272.88,1022.25h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1733.21 2635.77) rotate(-145.45)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1193.76" cy="996.72" r="95.01" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 17 -->
+          <g id="_17" data-name="17">
+            <path d="M945.84,547.4h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(381.74 1509.55) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M945.84,438.43h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1400.59 -490.71) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="943.98" cy="509.47" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 18 -->
+          <g id="_18" data-name="18">
+            <path d="M941.59,832.28h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(92.61 1790.18) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M941.59,723.32h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1681.22 -201.57) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="939.73" cy="794.35" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 9 -->
+          <g id="_9" data-name="9">
+            <path d="M1574.69,746.92h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(811.07 2337.92) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1574.69,637.95h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2228.96 -920.04) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1572.83" cy="708.99" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 8 -->
+          <g id="_8" data-name="8">
+            <path d="M1576.48,568.8h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(990.98 2161.59) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1576.48,459.84h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2052.63 -1099.94) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1574.62" cy="530.87" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+        </g>
+
+        <!-- ========= SECTION C ========= -->
+        <g id="C" data-name="C">
+          <!-- table 1 -->
+          <g id="_1" data-name="1">
+            <path d="M2206.72,326.82h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2206.72,387.87h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2206.72,448.92h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2206.72,509.98h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2328.18,509.98h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(4655.39 1051.45) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2328.18,448.92h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(4655.39 929.34) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2328.18,387.87h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(4655.39 807.24) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2328.18,326.82h5.55v31.5h-5.55c-3.6,0-6.52-2.92-6.52-6.52v-18.46c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(4655.39 685.13) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="2208.39" y="311.47" width="117.02" height="256.57" rx="13.61" ry="13.61" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 4 -->
+          <g id="_4" data-name="4">
+            <path d="M2273.39,1130.36h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1120.37 3433.42) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2190.42,1083.6h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-252.95 1349.94) rotate(-32.44)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2214.37,952.77h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1679.05 -1384.74) rotate(53.34)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2339.51,957.73h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(4591.83 -199.59) rotate(129.46)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2356.02,1083.83h13.54v52.33h-13.54c-3.6,0-6.52-2.92-6.52-6.52v-39.29c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3673.58 3362.28) rotate(-145.45)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="2276.9" cy="1058.3" r="95.01" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 5 -->
+          <g id="_5" data-name="5">
+            <path d="M2037.01,1100.64h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(919.67 3153.97) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2037.01,991.68h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3045 -1028.63) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="2035.15" cy="1062.71" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 6 -->
+          <g id="_6" data-name="6">
+            <path d="M2053.49,823.81h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1212.98 2893.61) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2053.49,714.84h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2784.65 -1321.94) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="2051.62" cy="785.88" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 3 -->
+          <g id="_3" data-name="3">
+            <path d="M2233.34,801.19h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1415.45 3050.85) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2233.34,692.23h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2941.89 -1524.41) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="2231.48" cy="763.27" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 7 -->
+          <g id="_7" data-name="7">
+            <path d="M2044.45,582.78h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1444.98 2643.55) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2044.45,473.81h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2534.58 -1553.94) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="2042.59" cy="544.85" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 2 -->
+          <g id="_2" data-name="2">
+            <path d="M2403.24,738.83h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1647.71 3158.39) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M2403.24,629.87h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3049.43 -1756.68) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="2401.38" cy="700.9" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+        </g>
+
+        <!-- ========= SECTION D ========= -->
+        <g id="D" data-name="D">
+          <!-- table 31 -->
+          <g id="_31" data-name="31">
+            <path d="M1205.95,1660.97h12.24v48.93h-12.24c-3.6,0-6.52-2.92-6.52-6.52v-35.89c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-476.63 2894.25) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1128.38,1617.25h12.24v48.93h-12.24c-3.6,0-6.52-2.92-6.52-6.52v-35.89c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-704.09 862.93) rotate(-32.44)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1150.77,1494.92h12.24v48.93h-12.24c-3.6,0-6.52-2.92-6.52-6.52v-35.89c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1683.75 -313.19) rotate(53.34)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1267.77,1499.56h12.24v48.93h-12.24c-3.6,0-6.52-2.92-6.52-6.52v-35.89c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3254.82 1511.75) rotate(129.46)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1283.21,1617.47h12.24v48.93h-12.24c-3.6,0-6.52-2.92-6.52-6.52v-35.89c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1414.3 3723.64) rotate(-145.45)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1208.81" cy="1593.59" r="88.83" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 12 -->
+          <g id="_12" data-name="12">
+            <path d="M1324.26,1322.55h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-14.98 2663.13) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1324.26,1213.59h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2554.17 -93.98) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1322.4" cy="1284.62" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 11 -->
+          <g id="_11" data-name="11">
+            <path d="M1573.46,1326.31h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(230.45 2916.08) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1573.46,1217.34h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2807.12 -339.42) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1571.6" cy="1288.38" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 30 -->
+          <g id="_30" data-name="30">
+            <path d="M665.84,1629.51h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M774.8,1629.51h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1549.22 3292.04) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="720.08" cy="1644.35" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 19 -->
+          <g id="_19" data-name="19">
+            <path d="M958.59,1403.07h12.72v50.2h-12.72c-3.6,0-6.52-2.92-6.52-6.52v-37.16c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-466.49 2389.86) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M958.59,1237.39h12.72v50.2h-12.72c-3.6,0-6.52-2.92-6.52-6.52v-37.16c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2224.18 300.8) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="959.15" cy="1345.4" r="78.92" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 10 -->
+          <g id="_10" data-name="10">
+            <path d="M1573.46,1021.29h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(535.47 2611.06) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1573.46,912.32h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2502.1 -644.44) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1571.6" cy="983.36" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+        </g>
+
+        <!-- ========= SECTION E ========= -->
+        <g id="E" data-name="E">
+          <!-- table 27 -->
+          <g id="_27" data-name="27">
+            <path d="M248.14,1538.6h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M248.14,1619.94h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M248.14,1701.28h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M248.14,1782.62h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M409.95,1782.62h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(822.95 3607.19) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M409.95,1701.28h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(822.95 3444.51) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M409.95,1619.94h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(822.95 3281.84) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M409.95,1538.6h9.56v41.96h-9.56c-3.6,0-6.52-2.92-6.52-6.52v-28.92c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(822.95 3119.16) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="252.54" y="1518.16" width="155.9" height="341.81" rx="13.61" ry="13.61" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 34 -->
+          <g id="_34" data-name="34">
+            <path d="M777.1,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3053.93 1497.1) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M697.83,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2974.66 1576.37) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M618.56,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2895.39 1655.64) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M539.29,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2816.12 1734.91) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M539.29,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1892.61 2973.82) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M618.56,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1813.34 3053.09) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M697.83,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1734.07 3132.36) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M777.1,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1654.8 3211.63) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="576.26" y="2187.73" width="151.93" height="333.12" rx="13.61" ry="13.61" transform="translate(3006.51 1702.06) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 33 -->
+          <g id="_33" data-name="33">
+            <path d="M1135.4,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3412.23 1138.8) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1056.13,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3332.96 1218.07) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M976.86,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3253.69 1297.34) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M897.59,2255.07h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3174.42 1376.61) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M897.59,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1534.31 3332.12) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M976.86,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1455.04 3411.39) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1056.13,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1375.77 3490.66) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1135.4,2412.77h9.16v40.89h-9.16c-3.6,0-6.52-2.92-6.52-6.52v-27.85c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1296.5 3569.93) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <rect x="934.56" y="2187.73" width="151.93" height="333.12" rx="13.61" ry="13.61" transform="translate(3364.81 1343.76) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 28 -->
+          <g id="_28" data-name="28">
+            <path d="M374,2175.61h20.59v70.71h-20.59c-3.6,0-6.52-2.92-6.52-6.52v-57.67c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1829.94 2592) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M261.89,2112.43h20.59v70.71h-20.59c-3.6,0-6.52-2.92-6.52-6.52v-57.67c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1110.08 479.36) rotate(-32.44)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M294.24,1935.65h20.59v70.71h-20.59c-3.6,0-6.52-2.92-6.52-6.52v-57.67c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1702.58 552.56) rotate(53.34)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M463.33,1942.36h20.59v70.71h-20.59c-3.6,0-6.52-2.92-6.52-6.52v-57.67c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(2296.16 2871.62) rotate(129.46)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M485.65,2112.75h20.59v70.71h-20.59c-3.6,0-6.52-2.92-6.52-6.52v-57.67c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-319.62 4196.83) rotate(-145.45)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="381.03" cy="2078.25" r="128.37" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 29 -->
+          <g id="_29" data-name="29">
+            <path d="M771.4,1881.92h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1542.42 3796.86) rotate(180)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M662.44,1881.92h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="716.77" cy="1900.1" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 35 -->
+          <g id="_35" data-name="35">
+            <path d="M676.08,2061.97h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(1667.67 130.85) rotate(45)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M753.13,2139.02h6.14v33.02h-6.14c-3.6,0-6.52-2.92-6.52-6.52v-19.98c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-238.84 4212.12) rotate(-135)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="715.56" cy="2115.79" r="51.9" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+          <!-- table 32 -->
+          <g id="_32" data-name="32">
+            <path d="M1096.31,1983.05h8.25v38.52h-8.25c-3.6,0-6.52-2.92-6.52-6.52v-25.48c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(3099.48 905.14) rotate(90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <path d="M1096.31,2110.17h8.25v38.52h-8.25c-3.6,0-6.52-2.92-6.52-6.52v-25.48c0-3.6,2.92-6.52,6.52-6.52Z" transform="translate(-1032.26 3226.61) rotate(-90)" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+            <circle cx="1099.12" cy="2065.82" r="60.55" fill="#252525" stroke="#383838" stroke-miterlimit="10" stroke-width="4"/>
+          </g>
+        </g>
+
+        <!-- ===== WALLS / DIVIDERS ===== -->
+        <rect x="2.15" y="514.15" width="125.09" height="935.5" fill="#1e1e1e"/>
+        <rect x="70.18" y="712.87" width="122.46" height="351.35" rx="44.69" ry="44.69" fill="#1e1e1e"/>
+        <rect x="1867.63" y="1522.66" width="89.39" height="457.38" rx="44.69" ry="44.69" transform="translate(3824.65 3502.7) rotate(180)" fill="#1e1e1e"/>
+        <path d="M2099.27,1337.44h0c24.19,0,43.82,19.64,43.82,43.82v413.56h-87.64v-413.56c0-24.19,19.64-43.82,43.82-43.82Z" transform="translate(533.14 3665.41) rotate(-90)" fill="#1e1e1e"/>
+        <path d="M2099.27,1711.62h0c24.19,0,43.82,19.64,43.82,43.82v413.56h-87.64v-413.56c0-24.19,19.64-43.82,43.82-43.82Z" transform="translate(158.97 4039.58) rotate(-90)" fill="#1e1e1e"/>
+        <rect x="70.18" y="2090.51" width="122.46" height="351.35" rx="44.69" ry="44.69" fill="#1e1e1e"/>
+        <rect x="2217.1" y="-123.31" width="69.24" height="351.35" rx="34.62" ry="34.62" transform="translate(2304.08 -2199.36) rotate(90)" fill="#1e1e1e"/>
+        <rect x="2497.68" y="53.39" width="69.26" height="1100.06" fill="#1e1e1e"/>
+        <rect x="2497.68" y="1135.09" width="69.26" height="852.76" fill="#1e1e1e"/>
+        <rect x="1369.58" y="1867.85" width="68.51" height="691.57" fill="#1e1e1e"/>
+        <rect x="971.4" y="-549.14" width="123.94" height="1226.51" transform="translate(1097.48 -969.24) rotate(90)" fill="#1e1e1e"/>
+        <rect x="2199.27" y="-314.09" width="51.45" height="683.93" transform="translate(2252.87 -2197.12) rotate(90)" fill="#1e1e1e"/>
+        <rect x="1887.64" y="311.34" width="51.45" height="842.16" transform="translate(3826.72 1464.84) rotate(180)" fill="#1e1e1e"/>
+        <rect x="722.21" y="1910.94" width="51.45" height="1246.3" transform="translate(-1786.16 3282.03) rotate(-90)" fill="#1e1e1e"/>
+        <path d="M317.45,1198.8h51.45v429.92c0,10.88-8.84,19.72-19.72,19.72h-12.01c-10.88,0-19.72-8.84-19.72-19.72v-429.92h0Z" transform="translate(-1080.44 1766.8) rotate(-90)" fill="#1e1e1e"/>
+        <path d="M1178.03,973.62h1.97c4.08,0,7.39,3.31,7.39,7.39v368.45h-16.75v-368.45c0-4.08,3.31-7.39,7.39-7.39Z" transform="translate(17.48 2340.55) rotate(-90)" fill="#1e1e1e"/>
+        <rect x="2180.93" y="1037.42" width="16.75" height="620.14" transform="translate(841.82 3536.8) rotate(-90)" fill="#1e1e1e"/>
+        <rect x="1346.14" y="341.91" width="6.44" height="54.58" fill="#1e1e1e" transform="translate(2698.73 738.4) rotate(180)"/>
+        <rect x="872.49" y="1484.18" width="16.75" height="624.62" transform="translate(-915.64 2677.36) rotate(-90)" fill="#1e1e1e"/>
+        <rect x="2498.42" y="1990.59" width="11.91" height="84.46" fill="#1e1e1e"/>
+        <rect x="2498.42" y="2342.09" width="11.91" height="90.88" fill="#1e1e1e"/>
+        <path d="M581.21,1493.4h0c6.96,0,12.62,5.65,12.62,12.62v282.09h-25.24v-282.09c0-6.96,5.65-12.62,12.62-12.62Z" fill="#1e1e1e"/>
+        <rect x="87.83" y="1449.37" width="14.94" height="422.65" fill="#1e1e1e"/>
+        <rect x="113.15" y="123.23" width="11.72" height="390.33" fill="#1e1e1e"/>
+        <rect x="302.51" y="-76.33" width="11.72" height="390.33" transform="translate(427.21 -189.53) rotate(90)" fill="#1e1e1e"/>
+
+        <rect x="1434.94" y="841.37" width="23.17" height="305.29" transform="translate(2893.06 1988.04) rotate(180)" fill="#1e1e1e"/>
+        <path d="M1301.43,1013.3h11.4c6.5,0,11.78,5.28,11.78,11.78v278.3h-23.17v-290.08h0Z" transform="translate(154.68 2471.35) rotate(-90)" fill="#1e1e1e"/>
+        <path d="M1536.6,716.66h23.17v214.9c0,6.39-5.19,11.59-11.59,11.59h0c-6.39,0-11.59-5.19-11.59-11.59v-214.9h0Z" transform="translate(718.28 2378.09) rotate(-90)" fill="#1e1e1e"/>
+        <rect x="2.15" y="1856.15" width="122.46" height="703.84" fill="#1e1e1e"/>
+        <g>
+          <rect x="2155.2" y="2249.81" width="122.46" height="351.35" rx="44.69" ry="44.69" transform="translate(-209.06 4641.92) rotate(-90)" fill="#1e1e1e"/>
+          <rect x="2155.2" y="2141.6" width="122.46" height="703.84" transform="translate(-277.09 4709.95) rotate(-90)" fill="#1e1e1e"/>
+        </g>
+        <polygon points="2.15 513.67 2.15 1.5 421.57 1.5 421.57 124.61 125.83 124.61 125.83 513.67 2.15 513.67" fill="#1e1e1e" stroke="#2a2a2a" stroke-miterlimit="10" stroke-width="3"/>
+        <rect x="2499.41" y="1989.14" width="66.05" height="451.98" fill="#1e1e1e" stroke="#2a2a2a" stroke-miterlimit="10" stroke-width="3"/>
+        <rect x="2499.41" y="2075.73" width="66.05" height="265.6" fill="#1e1e1e" stroke="#2a2a2a" stroke-miterlimit="10" stroke-width="3"/>
+        <rect x="3.56" y="1445.97" width="85.89" height="414.99" fill="#1e1e1e" stroke="#2a2a2a" stroke-miterlimit="10" stroke-width="3"/>
+        <!-- bar/curved structure -->
+        <path d="M772.42,521.67h0c14.2,0,25.72,11.53,25.72,25.72v725.47c0,20.76-16.86,37.62-37.62,37.62h-13.83v-763.09c0-14.2,11.53-25.72,25.72-25.72Z" transform="translate(1544.83 1832.16) rotate(180)" fill="#1e1e1e"/>
+        <rect x="746.7" y="410" width="25.7" height="176" fill="#1e1e1e" />
+
+        <!-- Horizontal wall between A and B -->
+        <rect x="784" y="415" width="590" height="12" fill="#1e1e1e" stroke="#2a2a2a" stroke-width="1"/>
+
+        <!-- ===== SECTION LABELS ===== -->
+        <text transform="translate(166.69 181.79)" fill="#ffffff" font-size="48" font-family="Montserrat,Arial,sans-serif" font-weight="500">A</text>
+        <text transform="translate(1377.67 1122.89)" fill="#ffffff" font-size="48.27" font-family="Montserrat,Arial,sans-serif" font-weight="500">B</text>
+        <text transform="translate(2438.96 1299.77)" fill="#ffffff" font-size="48.27" font-family="Montserrat,Arial,sans-serif" font-weight="500">C</text>
+        <text transform="translate(613.52 1765.33)" fill="#ffffff" font-size="48.27" font-family="Montserrat,Arial,sans-serif" font-weight="500">D</text>
+        <text transform="translate(1310.84 2483.06)" fill="#ffffff" font-size="48.27" font-family="Montserrat,Arial,sans-serif" font-weight="500">E</text>
+
+
+      </svg>
+
+      <div id="collapse-right" class="collapse-handle" title="Toggle section panel">
+        <span class="collapse-dots">⋮</span>
+      </div>
+
+    </main>
+
+    <aside id="col-right">
+      <p class="col-label">Section Panel</p>
+    </aside>
+
+  </div>
+
+  <!-- Guest profile modal -->
+  <div id="guest-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Guest profile">
+    <div id="guest-modal-inner">
+      <div id="guest-modal-header">
+        <div id="guest-modal-name-wrap">
+          <span id="guest-modal-name"></span>
+          <span id="guest-modal-booktype"></span>
+        </div>
+        <button id="guest-modal-close">✕</button>
+      </div>
+      <div id="guest-modal-body">
+        <div class="guest-row">
+          <span class="guest-label">Time</span>
+          <span id="guest-modal-time"></span>
+        </div>
+        <div class="guest-row">
+          <span class="guest-label">Covers</span>
+          <span id="guest-modal-covers"></span>
+        </div>
+        <div class="guest-row">
+          <span class="guest-label">Phone</span>
+          <span id="guest-modal-phone"></span>
+        </div>
+        <div class="guest-row">
+          <span class="guest-label">Email</span>
+          <span id="guest-modal-email"></span>
+        </div>
+        <div class="guest-row" id="guest-modal-allergy-row">
+          <span class="guest-label">Allergies</span>
+          <span id="guest-modal-allergies"></span>
+        </div>
+        <div class="guest-row" id="guest-modal-notes-row">
+          <span class="guest-label">Notes</span>
+          <span id="guest-modal-notes"></span>
+        </div>
+        <div class="guest-row">
+          <span class="guest-label">Tags</span>
+          <div id="guest-modal-tags"></div>
+        </div>
+        <div class="guest-row">
+          <span class="guest-label">Table</span>
+          <span id="guest-modal-table"></span>
+        </div>
+      </div>
+      <div id="guest-modal-actions">
+        <button class="guest-action-btn guest-action-btn--primary" id="btn-seat">
+          Seat Now
+        </button>
+        <button class="guest-action-btn" id="btn-assign">
+          Assign Table
+        </button>
+        <button class="guest-action-btn" id="btn-no-show">
+          No Show
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conflict modal -->
+  <div id="conflict-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Table conflict">
+    <div id="conflict-modal-inner">
+      <div id="conflict-modal-header">
+        <span>Table Conflict</span>
+        <button id="conflict-modal-close">✕</button>
+      </div>
+      <div id="conflict-modal-body">
+        <p id="conflict-desc"></p>
+        <div id="conflict-options">
+          <button class="conflict-btn" id="btn-override">
+            Seat here anyway — move current guests
+          </button>
+          <button class="conflict-btn" id="btn-pick-other">
+            Choose a different table
+          </button>
+          <button class="conflict-btn conflict-btn--cancel" id="btn-conflict-cancel">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Large party warning modal -->
+  <div id="party-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Table too small">
+    <div id="party-modal-inner">
+      <div id="party-modal-header">
+        <span>Table Too Small</span>
+        <button id="party-modal-close">✕</button>
+      </div>
+      <div id="party-modal-body">
+        <p id="party-modal-desc"></p>
+        <div id="party-modal-options">
+          <button class="conflict-btn" id="btn-party-larger">Choose a larger table</button>
+          <button class="conflict-btn" id="btn-party-anyway">Seat here anyway</button>
+          <button class="conflict-btn conflict-btn--cancel" id="btn-party-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table picker modal -->
+  <div id="table-picker-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Select a table">
+    <div id="table-picker-inner">
+      <div id="table-picker-header">
+        <span>Select a Table</span>
+        <button id="table-picker-close">✕</button>
+      </div>
+      <div id="table-picker-body">
+        <p id="table-picker-desc"></p>
+        <div id="table-picker-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Walk-in cover picker -->
+  <div id="walkin-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Walk-in guest">
+    <div id="walkin-inner">
+      <div id="walkin-header">
+        <span>Walk-in — How many guests?</span>
+        <button id="walkin-close">✕</button>
+      </div>
+      <div id="walkin-body">
+        <div id="walkin-covers-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table options modal (click on non-occupied table) -->
+  <div id="table-options-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Table options">
+    <div id="table-options-inner">
+      <div id="table-options-header">
+        <span id="table-options-title"></span>
+        <button id="table-options-close">✕</button>
+      </div>
+      <div id="table-options-body">
+        <div id="table-options-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggestion modal -->
+  <div id="suggest-modal" class="modal-hidden" role="dialog" aria-modal="true" aria-label="Suggested table">
+    <div id="suggest-modal-inner">
+      <div id="suggest-modal-header">
+        <span>Suggested Table</span>
+        <button id="suggest-modal-close">✕</button>
+      </div>
+      <div id="suggest-modal-body">
+        <div id="suggest-modal-desc"></div>
+        <div id="suggest-modal-warning" class="modal-hidden"></div>
+      </div>
+      <div id="suggest-modal-actions">
+        <button class="guest-action-btn guest-action-btn--primary" id="btn-suggest-seat">Seat Here</button>
+        <button class="guest-action-btn" id="btn-suggest-other">See Other Tables</button>
+        <button class="guest-action-btn" id="btn-suggest-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guided tour overlay + popup -->
+  <div id="tour-overlay" class="tour-hidden"></div>
+  <div id="tour-popup" class="tour-hidden">
+    <div id="tour-popup-header">
+      <span id="tour-step-counter"></span>
+      <button id="tour-exit">✕ Exit</button>
+    </div>
+    <div id="tour-popup-body"></div>
+    <div id="tour-popup-footer">
+      <button id="tour-prev">← Prev</button>
+      <button id="tour-next">Next →</button>
+    </div>
+    <div id="tour-arrow"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
