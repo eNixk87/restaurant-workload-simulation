@@ -1087,7 +1087,7 @@ function renderTableTimeLabels() {
       t.setAttribute('fill', entry.color);
       t.setAttribute('font-size', String(FONT_SZ));
       t.setAttribute('font-weight', '600');
-      t.setAttribute('font-family', 'system-ui, sans-serif');
+      t.setAttribute('font-family', 'Roboto, sans-serif');
       t.textContent = entry.time;
       g.appendChild(t);
 
@@ -2150,8 +2150,32 @@ document.addEventListener('DOMContentLoaded', () => {
         t.minutesRemaining      = 8;
         t.turnoverDue           = addMinutes(STATE.service.currentTime, 8);
         renderHourglassIndicators();
+
+        // Place a ghost hourglass above the tour overlay at the same screen position
+        requestAnimationFrame(() => {
+          const hg = document.querySelector('.hourglass');
+          if (!hg) return;
+          const rect = hg.getBoundingClientRect();
+          const ghost = document.createElement('div');
+          ghost.id = 'tour-hourglass-ghost';
+          ghost.textContent = '⏳';
+          ghost.style.cssText = [
+            'position:fixed',
+            'z-index:91',
+            'pointer-events:none',
+            'left:' + (rect.left + rect.width  / 2) + 'px',
+            'top:'  + (rect.top  + rect.height / 2) + 'px',
+            'transform:translate(-50%,-50%)',
+            'font-size:' + Math.max(rect.height, 24) + 'px',
+            'line-height:1',
+            'filter:drop-shadow(0 0 8px rgba(255,210,80,0.9))',
+          ].join(';');
+          document.body.appendChild(ghost);
+        });
       },
       onExit(saved) {
+        const ghost = document.getElementById('tour-hourglass-ghost');
+        if (ghost) ghost.remove();
         if (!saved.tableId) return;
         const t = STATE.tables[saved.tableId];
         if (!t) return;
