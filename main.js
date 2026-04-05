@@ -149,16 +149,9 @@ function renderWorkloadGlows() {
     const shapes = glowGroup.querySelectorAll('rect, path');
 
     if (isRed) {
-      // Intensity scales from 0 (at 70%) to 1 (at 100%)
-      const intensity = (workload - 70) / 30;
-      const r = Math.min(255, 180 + Math.round(intensity * 75));
-      const g = Math.max(20,  60  - Math.round(intensity * 40));
-      const b = Math.max(0,   20  - Math.round(intensity * 20));
-      const color = `rgb(${r}, ${g}, ${b})`;
-
       shapes.forEach(shape => {
-        shape.setAttribute('fill', color);
-        shape.setAttribute('stroke', color);
+        shape.setAttribute('fill', 'rgb(255, 20, 0)');
+        shape.setAttribute('stroke', 'rgb(255, 20, 0)');
         shape.setAttribute('stroke-width', '35');
         shape.setAttribute('opacity', '0.75');
       });
